@@ -1,48 +1,77 @@
-import { Card } from "./Card";
-import { Bill } from "./Bill";
-import { Account } from "./Account";
+import {Card} from "./Card";
+import {Bill} from "./Bill";
+import {Account} from "./Account";
 
 export class Bank {
-  cards: Array<any>;
-  accounts: Array<any>;
+    cards: Array<Card>;
+    accounts: Array<Account>;
 
-  constructor(public nameBank: string) {
-    this.cards = [];
-    this.accounts = [];
-  }
+    constructor(public nameBank: string) {
+        this.cards = [];
+        this.accounts = [];
+    }
 
-  getInformationCard(number: NumberCardType): Card {
-    return Card;
-  }
-  acceptСard(number: NumberCardType): Card {
-    return Card;
-    // или undefined
-    // return card;
-  }
+    createCard(numberCard: NumberCardType, numberAccount: NumberAccountType, pin: number) {
+        const card = new Card(numberCard, pin)
+        const account = new Account(numberAccount)
+        this.cards.push(card)
+        this.accounts.push(account)
+        account.addCard(card)
+        return [card, account]
+    }
 
-  checkPin(pin: number, number: NumberCardType): boolean {
-    return true;
-  }
+    findCard(number: NumberCardType, field: FieldsCardType) {
+        return this.cards.find((item: Card) => {
+            if (item[field] === number) return item
+        })
+    }
 
-  getBalance(number: NumberAccountType): number {
-    // класс Account что-то возвращает
-    return 123;
-  }
-  returnBalanceAccount(number: NumberAccountType) {
-    // класс Account что-то возвращает
-  }
+    findAccount(number: NumberAccountType, field: FieldsAccountType) {
+        return this.accounts.find((item: Account) => {
+            if (item[field] === field) return item
+        })
+    }
 
-  blockCard(number: NumberCardType): void {}
 
-  blockAccount(number: NumberAccountType): void {}
+    getInformationCard(number: NumberCardType): Card | undefined {
+        return this.findCard(number, 'number')
+    }
 
-  withdrawFromCard(money: number): void {}
+    checkPin(pin: number, number: NumberCardType): boolean {
+        const card = this.findCard(number, 'number')
+        if (card) {
+            return card.pin === pin
+        }
+    }
 
-  putFromCard(money: number): void {}
+    getBalance(number: NumberAccountType): number {
 
-  transferToAnotherAccount(
-    toAccount: string,
-    fromAccount: string,
-    money: number
-  ): void {}
+        const account = this.findAccount(number, 'number')
+        if (account) {
+            return account.balance
+        }
+    }
+
+    returnBalanceAccount(number: NumberAccountType) {
+        // класс Account что-то возвращает
+    }
+
+    blockCard(number: NumberCardType): void {
+    }
+
+    blockAccount(number: NumberAccountType): void {
+    }
+
+    withdrawFromCard(money: number): void {
+    }
+
+    putFromCard(money: number): void {
+    }
+
+    transferToAnotherAccount(
+        toAccount: string,
+        fromAccount: string,
+        money: number
+    ): void {
+    }
 }

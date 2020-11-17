@@ -1,5 +1,9 @@
 export class Card {
-    constructor(number: string, name: string, isBlock: boolean) {
+    isBlock: boolean
+
+    constructor(public number: NumberCardType,public pin: number) {
+        this.isBlock = false
+
     }
 
     requestBlock() {

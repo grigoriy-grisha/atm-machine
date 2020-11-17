@@ -5,7 +5,7 @@ export class Account {
   cards: Array<Card>;
   isBlock: boolean;
 
-  constructor(private number: string) {
+  constructor(private number: NumberAccountType) {
     this.balance = {
       amount: 0,
       currency: "rubles",
