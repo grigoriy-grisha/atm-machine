@@ -4,7 +4,7 @@
 #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
 
 # Node artifact files
-gavrilov-atm-machine/node_modules/
+node_modules/
 dist/
 
 # Compiled Java class files
@@ -24,7 +24,7 @@ target/
 dist/
 
 # JetBrains IDE
-../../.idea/
+.idea/
 
 # Unit test reports
 TEST*.xml
