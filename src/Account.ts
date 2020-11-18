@@ -1,22 +1,53 @@
 import { Card } from "./Card";
+import { Amount } from "./Amount";
+import { Bank } from "./Bank";
+import { CurrencyType, NumberAccountType, NumberCardType } from "./type";
 
 export class Account {
-  balance: IBalanceAccount;
-  cards: Array<Card>;
+  balance: Amount;
+  cards: Array<NumberCardType>;
   isBlock: boolean;
 
-  constructor(private number: NumberAccountType) {
-    this.balance = {
-      amount: 0,
-      currency: "rubles",
-    };
+  constructor(
+    public number: NumberAccountType,
+    public currency: CurrencyType,
+    private bank: Bank
+  ) {
+    this.balance = new Amount(0, "dollars", bank);
     this.isBlock = false;
     this.cards = [];
   }
 
-  addCard(card: Card) {}
+  addCard(card: Card) {
+    this.cards.push(card.number);
+  }
 
-  removeCard(card: Card) {}
+  removeCard(card: Card) {
+    if (this.cards.length === 1) return;
+    this.cards.filter((item) => {
+      if (item === card.number) {
+        return item;
+      }
+    });
+  }
 
-  returnBalance(currency: CurrencyType) {}
+  returnBalance(): number {
+    return this.balance.value;
+  }
+
+  addToBalance(amount: number, fromCurrency: CurrencyType) {
+    this.balance.value += this.balance.conversionOperation(
+      amount,
+      fromCurrency,
+      this.currency
+    )!;
+  }
+
+  subtractFromBalance(amount: number, fromCurrency: CurrencyType) {
+    this.balance.value -= this.balance.conversionOperation(
+      amount,
+      fromCurrency,
+      this.currency
+    )!;
+  }
 }

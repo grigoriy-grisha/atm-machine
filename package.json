@@ -4,11 +4,12 @@
   "description": "",
   "main": "src/ATM.ts",
   "scripts": {
-    "start": "ts-node src/ATM.ts"
+    "start": "ts-node src/index.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/node": "^14.14.8",
     "typescript": "^4.0.5"
   },
   "devDependencies": {

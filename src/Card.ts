@@ -1,9 +1,9 @@
+import {NumberCardType} from "./type";
+
 export class Card {
-    isBlock: boolean
-
-    constructor(public number: NumberCardType,public pin: number) {
-        this.isBlock = false
-
+    constructor(
+        public number: NumberCardType,
+    ) {
     }
 
     requestBlock() {

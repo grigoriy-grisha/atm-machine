@@ -1,4 +1,5 @@
+import {CurrencyType} from "./type";
+
 export class Bill {
-     constructor(denomination: number, currency: CurrencyType) {
-     }
+  constructor(public denomination: number, public currency: CurrencyType) {}
 }
