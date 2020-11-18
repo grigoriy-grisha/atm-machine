@@ -1,6 +1,5 @@
 import { Card } from "./Card";
 import { Account } from "./Account";
-import { Amount } from "./Amount";
 import {
   CurrencyType,
   FieldsAccountType,

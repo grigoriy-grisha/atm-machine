@@ -12,7 +12,9 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "resolveJsonModule": true,
-    "strictNullChecks": false
+    "strictNullChecks": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   },
   "files": ["types.d.ts", "./node_modules/@types/node/index.d.ts"],
   "include": ["src/**/*.ts", "types.d.ts", "db.ts", "index.ts"],

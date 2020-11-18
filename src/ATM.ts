@@ -1,28 +1,35 @@
 import { Card } from "./Card";
 import { Bank } from "./Bank";
 import { Bill } from "./Bill";
-import { Amount } from "./Amount";
-import { CurrencyType, NumberCardType } from "./type";
+import { CurrencyType, NumberAccountType, NumberCardType } from "./type";
+//TODO сделать перевод по карте и по счету
+//TODO сделать декоратор
+function available(target: Function, key: string, value: any) {
+  return {
+    value: (...args: any[]) => {
+      return value.value.apply(this, args);
+    },
+  };
+}
 
 export class ATM {
-  currentCard: Card | null = null;
+  private currentCard: Card | null = null;
   private blockedCards: Card[] = [];
-  private available: boolean = false;
   private attempt: number = 0;
 
   constructor(private bank: Bank) {}
 
   acceptCard(card: Card, pin: number) {
     const foundCard = this.bank.getInformationCard(card.number);
+
     if (!foundCard) throw new Error("Карта не обслуживается");
+
     this.currentCard = foundCard;
     this.checkCardPin(pin);
   }
 
   returnCard() {
-    if (!this.available) {
-      this.currentCard = null;
-    }
+    this.currentCard = null;
   }
 
   giveCard(card: Card) {
@@ -65,7 +72,17 @@ export class ATM {
     this.bank.putFromCard(value, currency, this.currentCard!.number);
   }
 
-  transferToAnotherAccount(toNumberCard: string, bill: Bill) {
+  transferToAnotherAccount(toNumberCard: NumberAccountType, bill: Bill) {
+    const [value, currency] = this.recognitionBills(bill);
+    this.bank.transferToAnotherAccount(
+      this.currentCard.number,
+      toNumberCard,
+      value,
+      currency
+    );
+  }
+
+  transferToAnotherCard(toNumberCard: NumberCardType, bill: Bill) {
     const [value, currency] = this.recognitionBills(bill);
     this.bank.transferToAnotherAccount(
       this.currentCard.number,

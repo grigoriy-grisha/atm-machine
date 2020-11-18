@@ -18,7 +18,6 @@ export class Amount {
     const nameMethodForConversionOperation = `${currencyFrom}To${
       currencyTo[0].toUpperCase() + currencyTo.slice(1)
     }`;
-    console.log(nameMethodForConversionOperation);
     return (this as any)[nameMethodForConversionOperation](value);
   }
 
@@ -35,32 +34,10 @@ export class Amount {
   }
 
   dollarsToRubles(value: number) {
-    if (this.currency === "rubles") return this.value;
     return value * this.bank.getCourse();
   }
 
   rublesToDollars(value: number) {
-    if (this.currency === "dollars") return this.value;
-
     return value / this.bank.getCourse();
   }
 }
-
-//
-// conversionOperation(value: number, bank: Bank, currency: CurrencyType) {
-//   if (currency === "rubles") {
-//     return value * bank.getCourse();
-//   } else if (currency === "dollars") {
-//     return value / bank.getCourse();
-//   }
-// }
-//
-// dollarsToRubles() {
-//   if (this.currency === "rubles") return this.value;
-//   return this.conversionOperation(this.value, this.bank, this.currency);
-// }
-//
-// rublesToDollars() {
-//   if (this.currency === "dollars") return this.value;
-//   return this.conversionOperation(this.value, this.bank, this.currency);
-// }

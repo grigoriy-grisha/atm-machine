@@ -44,10 +44,18 @@ export class Account {
   }
 
   subtractFromBalance(amount: number, fromCurrency: CurrencyType) {
-    this.balance.value -= this.balance.conversionOperation(
+    const value = this.balance.conversionOperation(
       amount,
       fromCurrency,
       this.currency
     )!;
+
+    const currentBalance = this.balance.value;
+    const summaryBalance = currentBalance - value;
+
+    if (summaryBalance < 0)
+      throw Error("Вы не можете снять наличные, вам не хватает средств ");
+
+    this.balance.value = summaryBalance;
   }
 }
