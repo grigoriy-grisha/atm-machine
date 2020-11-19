@@ -37,23 +37,33 @@ const atm2 = new ATM(tinkoff);
 //   console.log(e);
 // }
 
+// account1.addCard(card2);
+// console.log(account1.getCards());
+// account1.removeCard(card2);
+// console.log(account1.getCards());
+
 atm1.acceptCard(card1, 1234);
-//
+
 // atm2.putFromCard(rubles500);
 // atm1.acceptCard(card1, 1234);
-atm1.putFromCard(dollar100);
+atm1.putFromCard(rubles1000);
+
 // atm1.putFromCard(rubles500);
 // atm1.putFromCard(dollar10);
 // atm1.withdrawFromCard(dollar1);
 //
-atm1.transferToAnotherAccount("2332 8412 8759 6911", dollar100);
+atm1.transferToAnotherAccount("4532 8642 1259 6918 1431", rubles500);
+atm1.transferToAnotherCard("4532 8642 1259 6918", rubles500);
+// atm1.transferToAnotherCard("4532 8642 1259 6918", dollar100);
 // atm1.withdrawFromCard(rubles100);
 // console.log(atm1.checkBalanceByCardNumber());
 
-// atm2.acceptCard(card2, 1234);
+atm2.acceptCard(card2, 1234);
+atm2.withdrawFromCard(dollar1);
 // atm2.putFromCard(rubles2000);
 // atm2.withdrawFromCard(rubles500);
 //
 // // console.log(atm1.checkBalanceByCardNumber());
 // atm2.withdrawFromCard(rubles2000);
+console.log(atm1.checkBalanceByCardNumber());
 console.log(atm2.checkBalanceByCardNumber());

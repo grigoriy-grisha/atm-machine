@@ -1,61 +1,59 @@
 import { Card } from "./Card";
-import { Amount } from "./Amount";
 import { Bank } from "./Bank";
-import { CurrencyType, NumberAccountType, NumberCardType } from "./type";
+import { CurrencyType, NumberAccountType } from "./type";
+import { Amount } from "./Amount";
 
 export class Account {
-  balance: Amount;
-  cards: Array<NumberCardType>;
-  isBlock: boolean;
+  private isBlocked: boolean = false;
+  private cards: Card[] = [];
+  private balance: number = 0;
 
   constructor(
     public number: NumberAccountType,
     public currency: CurrencyType,
     private bank: Bank
-  ) {
-    this.balance = new Amount(0, "dollars", bank);
-    this.isBlock = false;
-    this.cards = [];
+  ) {}
+
+  getBlocked() {
+    return this.isBlocked;
+  }
+
+  setBlocked(block: boolean) {
+    this.isBlocked = block;
+  }
+
+  getCards() {
+    return this.cards;
   }
 
   addCard(card: Card) {
-    this.cards.push(card.number);
+    this.cards.push(card);
   }
 
   removeCard(card: Card) {
-    if (this.cards.length === 1) return;
-    this.cards.filter((item) => {
-      if (item === card.number) {
-        return item;
-      }
+    const index = this.cards.findIndex((item, index): number | boolean => {
+      if (item.number === card.number) return index;
     });
+    console.log(index);
+    if (index === -1) throw new Error("Card not found");
+    this.cards.splice(index, 1);
   }
 
-  returnBalance(): number {
-    return this.balance.value;
+  getBalance(): number {
+    return this.balance;
   }
 
-  addToBalance(amount: number, fromCurrency: CurrencyType) {
-    this.balance.value += this.balance.conversionOperation(
-      amount,
-      fromCurrency,
-      this.currency
-    )!;
+  addToBalance(amount: Amount) {
+    this.balance += amount.conversionOperation(this.currency);
   }
 
-  subtractFromBalance(amount: number, fromCurrency: CurrencyType) {
-    const value = this.balance.conversionOperation(
-      amount,
-      fromCurrency,
-      this.currency
-    )!;
+  subtractFromBalance(amount: Amount) {
+    const result =
+      this.getBalance() - amount.conversionOperation(this.currency);
 
-    const currentBalance = this.balance.value;
-    const summaryBalance = currentBalance - value;
+    if (result < 0)
+      throw Error("You can't withdraw cash, you don't have funds on the card");
 
-    if (summaryBalance < 0)
-      throw Error("Вы не можете снять наличные, вам не хватает средств ");
-
-    this.balance.value = summaryBalance;
+    this.balance = result;
   }
 }

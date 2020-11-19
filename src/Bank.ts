@@ -7,6 +7,7 @@ import {
   NumberAccountType,
   NumberCardType,
 } from "./type";
+import { Amount } from "./Amount";
 
 interface ICardInfo {
   card: Card;
@@ -51,23 +52,27 @@ export class Bank {
 
   findAccount(number: NumberAccountType, field: FieldsAccountType) {
     return this.accounts.find((item: Account) => {
-      console.log(item[field]);
-      console.log(number);
       if (item[field] === number) return item;
     });
   }
 
   findAccountByCardNumber(number: NumberCardType): Account | undefined {
+    let cards: Card[];
+    let foundAccount: Card;
+
     return this.accounts.find((account) => {
-      if (account.cards.includes(number)) {
-        return account;
-      }
+      cards = account.getCards();
+      foundAccount = cards.find((item) => {
+        if (item.number === number) return item;
+      });
+
+      if (foundAccount) return account;
     });
   }
 
   getInformationCard(number: NumberCardType): Card | undefined {
     const account = this.findAccountByCardNumber(number);
-    if (account && account.isBlock) return;
+    if (account && account.getBlocked()) return;
 
     const cardInfo = this.findCard(number);
     if (cardInfo) return cardInfo.card;
@@ -80,51 +85,52 @@ export class Bank {
 
   getBalance(number: NumberAccountType): number {
     const account = this.findAccount(number, "number")!;
-    return account.balance.value;
+    return account.getBalance();
   }
 
   blockAccount(number: NumberAccountType) {
     const account = this.findAccountByCardNumber(number);
     if (account) {
-      account.isBlock = true;
+      account.setBlocked(true);
+    }
+  }
+
+  unlockAccount(number: NumberAccountType) {
+    const account = this.findAccountByCardNumber(number);
+    if (account) {
+      account.setBlocked(false);
     }
   }
 
   workWithBalanceAccount(
     number: NumberCardType,
-    money: number,
-    fromCurrency: CurrencyType,
+    amount: Amount,
     methodForWorkBalance: FieldsByWorkWithAccountType
   ) {
     const account = this.findAccountByCardNumber(number)!;
 
-    account[methodForWorkBalance](money, fromCurrency);
+    account[methodForWorkBalance](amount);
   }
 
-  withdrawFromCard(
-    value: number,
-    currency: CurrencyType,
-    number: NumberCardType
-  ) {
-    this.workWithBalanceAccount(number, value, currency, "subtractFromBalance");
+  withdrawFromCard(amount: Amount, number: NumberCardType) {
+    this.workWithBalanceAccount(number, amount, "subtractFromBalance");
   }
 
-  putFromCard(value: number, currency: CurrencyType, number: NumberCardType) {
-    this.workWithBalanceAccount(number, value, currency, "addToBalance");
+  putFromCard(amount: Amount, number: NumberCardType) {
+    this.workWithBalanceAccount(number, amount, "addToBalance");
   }
 
   transferToAnotherAccount(
     fromNumberCard: NumberCardType,
-    toNumberCard: NumberCardType,
-    value: number,
-    currency: CurrencyType
+    toNumberAccount: NumberCardType | NumberAccountType,
+    amount: Amount
   ) {
     const from = this.findAccountByCardNumber(fromNumberCard);
-    const to = this.findAccountByCardNumber(toNumberCard);
+    const to = this.findAccount(toNumberAccount, "number");
 
     if (to && from) {
-      from.subtractFromBalance(value, currency);
-      to.addToBalance(value, currency);
+      from.subtractFromBalance(amount);
+      to.addToBalance(amount);
     }
   }
 }

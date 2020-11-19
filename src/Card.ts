@@ -1,16 +1,5 @@
-import {NumberCardType} from "./type";
+import { NumberCardType } from "./type";
 
 export class Card {
-    constructor(
-        public number: NumberCardType,
-    ) {
-    }
-
-    requestBlock() {
-
-    }
-
-    requestUnlock() {
-
-    }
+  constructor(public number: NumberCardType) {}
 }
