@@ -1,5 +1,5 @@
 import { Bank } from "./Bank";
-import { CurrencyType } from "./type";
+import { CurrencyType } from "./types";
 
 
 
@@ -16,7 +16,6 @@ export class Amount {
     if (this.currency === currencyTo) return this.value;
     if (this.currency === 'dollars') return this.dollarsToRubles()
     if (this.currency === 'rubles') return this.rublesToDollars()
-
   }
 
   dollarsToRubles() {

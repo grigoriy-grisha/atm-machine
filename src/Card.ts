@@ -1,5 +1,5 @@
-import { NumberCardType } from "./type";
+import { CardInterface, NumberCardType } from "./types";
 
-export class Card {
+export class Card implements CardInterface {
   constructor(public number: NumberCardType) {}
 }

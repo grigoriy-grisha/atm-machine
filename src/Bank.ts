@@ -1,13 +1,14 @@
 import { Card } from "./Card";
 import { Account } from "./Account";
+import { Amount } from "./Amount";
+
 import {
   CurrencyType,
   FieldsAccountType,
   FieldsByWorkWithAccountType,
   NumberAccountType,
   NumberCardType,
-} from "./type";
-import { Amount } from "./Amount";
+} from "./types";
 
 interface ICardInfo {
   card: Card;
@@ -29,43 +30,32 @@ export class Bank {
     numberAccount: NumberAccountType,
     currency: CurrencyType,
     pin: number
-  ): [Card, Account] {
+  ) {
     const card = new Card(numberCard);
     const account = new Account(numberAccount, currency, this);
-    const cardInfo = {
-      card,
-      pin,
-    };
+    const cardInfo = { card, pin };
+
+    account.addCard(card);
 
     this.cards.push(cardInfo);
     this.accounts.push(account);
-    account.addCard(card);
 
     return [card, account];
   }
 
   findCard(number: NumberCardType): ICardInfo | undefined {
-    return this.cards.find((item: ICardInfo) => {
-      if (item.card.number === number) return item;
-    });
+    return this.cards.find((item: ICardInfo) => item.card.number === number);
   }
 
   findAccount(number: NumberAccountType, field: FieldsAccountType) {
-    return this.accounts.find((item: Account) => {
-      if (item[field] === number) return item;
-    });
+    return this.accounts.find((item: Account) => item[field] === number);
   }
 
   findAccountByCardNumber(number: NumberCardType): Account | undefined {
-    let cards: Card[];
-    let foundAccount: Card;
-
     return this.accounts.find((account) => {
-      cards = account.getCards();
-      foundAccount = cards.find((item) => {
-        if (item.number === number) return item;
-      });
-
+      const foundAccount = account
+        .getCards()
+        .find((item) => item.number === number);
       if (foundAccount) return account;
     });
   }
@@ -97,9 +87,7 @@ export class Bank {
 
   unlockAccount(number: NumberAccountType) {
     const account = this.findAccountByCardNumber(number);
-    if (account) {
-      account.setBlocked(false);
-    }
+    if (account) account.setBlocked(false);
   }
 
   workWithBalanceAccount(

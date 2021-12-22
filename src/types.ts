@@ -10,3 +10,12 @@ export type FieldsByWorkWithAccountType =
   | "addToBalance"
   | "subtractFromBalance";
 
+
+export interface CardInterface {
+  number: NumberAccountType
+}
+
+export interface BillInterface {
+  denomination: number
+  currency: CurrencyType
+}

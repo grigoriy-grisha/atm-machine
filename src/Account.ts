@@ -1,11 +1,11 @@
-import { Card } from "./Card";
 import { Bank } from "./Bank";
-import { CurrencyType, NumberAccountType } from "./type";
 import { Amount } from "./Amount";
+
+import {CardInterface, CurrencyType, NumberAccountType} from "./types";
 
 export class Account {
   private isBlocked: boolean = false;
-  private cards: Card[] = [];
+  private cards: CardInterface[] = [];
   private balance: number = 0;
 
   constructor(
@@ -26,15 +26,13 @@ export class Account {
     return this.cards;
   }
 
-  addCard(card: Card) {
+  addCard(card: CardInterface) {
     this.cards.push(card);
   }
 
-  removeCard(card: Card) {
-    const index = this.cards.findIndex((item, index): number | boolean => {
-      if (item.number === card.number) return index;
-    });
-    console.log(index);
+  removeCard(card: CardInterface) {
+    const index = this.cards.findIndex((item) => item.number === card.number);
+
     if (index === -1) throw new Error("Card not found");
     this.cards.splice(index, 1);
   }

@@ -1,5 +1,5 @@
-import {CurrencyType} from "./type";
+import { BillInterface, CurrencyType } from "./types";
 
-export class Bill {
+export class Bill implements BillInterface {
   constructor(public denomination: number, public currency: CurrencyType) {}
 }
